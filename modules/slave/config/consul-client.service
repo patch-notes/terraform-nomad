@@ -1,0 +1,15 @@
+[Unit]
+Description=Consul client
+After=coreos-metadata.service docker.service
+Requires=coreos-metadata.service docker.service
+
+[Service]
+EnvironmentFile=/run/metadata/coreos
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill consul-client
+ExecStartPre=-/usr/bin/docker rm consul-client
+ExecStartPre=/usr/bin/docker pull consul
+ExecStart=/usr/bin/docker run --net host --env 'CONSUL_ALLOW_PRIVILEGED_PORTS=' --name consul-client consul agent -dns-port=53 -recursor=8.8.8.8 -bind=0.0.0.0 -advertise=${COREOS_EC2_IPV4_LOCAL} -retry-join "provider=aws tag_key=Name tag_value=nomad-master"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Run the SLA-Web Journey 1 every 5 minutes
+
+[Timer]
+OnBootSec=0
+OnUnitActiveSec=12h
+
+[Install]
+WantedBy=timers.target

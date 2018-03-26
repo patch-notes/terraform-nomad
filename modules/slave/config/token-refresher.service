@@ -1,0 +1,14 @@
+[Unit]
+Description=Nomad Client
+After=coreos-metadata.service docker.service
+Requires=coreos-metadata.service docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker kill token-referesher
+ExecStartPre=-/usr/bin/docker rm token-referesher
+ExecStartPre=/usr/bin/docker pull thepeak/ecr-get-credentials
+ExecStart=/bin/bash -c " \
+    /usr/bin/docker run --rm thepeak/ecr-get-credentials > /etc/docker-auth.json"
+
+[Install]
+WantedBy=multi-user.target

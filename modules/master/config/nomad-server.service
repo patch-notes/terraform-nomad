@@ -1,0 +1,14 @@
+[Unit]
+Description=Nomad Server
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill nomad-server
+ExecStartPre=-/usr/bin/docker rm nomad-server
+ExecStartPre=/usr/bin/docker pull djenriquez/nomad
+ExecStart=/usr/bin/docker run -v /var/run/docker.sock:/var/run/docker.sock --net host --name nomad-server djenriquez/nomad agent -server -bootstrap-expect=${num_masters}
+
+[Install]
+WantedBy=multi-user.target

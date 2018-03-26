@@ -1,0 +1,15 @@
+[Unit]
+Description=Consul Server
+After=coreos-metadata.service docker.service
+Requires=coreos-metadata.service docker.service
+
+[Service]
+EnvironmentFile=/run/metadata/coreos
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill consul-server
+ExecStartPre=-/usr/bin/docker rm consul-server
+ExecStartPre=/usr/bin/docker pull consul
+ExecStart=/usr/bin/docker run --net host --name consul-server consul agent -server -bootstrap-expect=${num_masters} -advertise=$${COREOS_EC2_IPV4_LOCAL} -retry-join "provider=aws tag_key=Name tag_value=nomad-master" -ui
+
+[Install]
+WantedBy=multi-user.target

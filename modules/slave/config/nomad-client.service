@@ -1,0 +1,44 @@
+[Unit]
+Description=Nomad Client
+After=coreos-metadata.service docker.service
+Requires=coreos-metadata.service docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/run/metadata/coreos
+ExecStartPre=-/usr/bin/docker kill nomad-client
+ExecStartPre=-/usr/bin/docker rm nomad-client
+ExecStartPre=/usr/bin/touch /etc/docker-auth.json
+ExecStartPre=/usr/bin/docker pull djenriquez/nomad
+ExecStart=/bin/bash -c "set -e \
+  && INSTANCE_NAME=$(docker run --rm thepeak/awscli ec2 describe-instances \
+                    --region ${COREOS_EC2_REGION} \
+                    --instance-id ${COREOS_EC2_INSTANCE_ID} \
+                    --query 'Reservations[0].Instances[0].Tags[?Key==`Name`].Value' \
+                    --output text \
+                  ) \
+  && docker run \
+      -v /tmp:/tmp \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v /etc/docker-auth.json:/etc/docker-auth.json \
+      --dns 127.0.0.1 \
+      --net host \
+      --name nomad-client \
+      --privileged \
+      -e NOMAD_LOCAL_CONFIG='{ \
+        \"client\": { \
+          \"enabled\": true, \
+          \"meta\": { \
+            \"instance_name\" : \"'$INSTANCE_NAME'\", \
+            \"public_ip\": \"${COREOS_EC2_IPV4_PUBLIC}\", \
+            \"private_ip\": \"${COREOS_EC2_IPV4_LOCAL}\" \
+          }, \
+          \"options\": { \
+            \"docker.auth.config\": \"/etc/docker-auth.json\" \
+          } \
+        } \
+      }' \
+      djenriquez/nomad agent"
+
+[Install]
+WantedBy=multi-user.target
