@@ -28,3 +28,15 @@ variable "key_name" {}
 variable "master_instance_type" {
   default = "m4.large"
 }
+
+variable "slave_instance_type" {
+  default = "m4.large"
+}
+
+variable "slave_instance_name" {
+  default = "nomad-slave"
+}
+
+variable "slave_target_group_arns" {
+  default = []
+}

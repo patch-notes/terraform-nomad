@@ -7,30 +7,32 @@ data "aws_ami" "coreos" {
   }
 }
 
-resource "aws_autoscaling_group" "nomad_masters" {
-  count = "${var.num_masters != 0 ? 1 : 0}"
+resource "aws_autoscaling_group" "nomad_slaves" {
+  count = "${var.num_slaves != 0 ? 1 : 0}"
 
   availability_zones        = ["${var.availability_zones}"]
-  name                      = "nomad-master"
-  max_size                  = "${var.num_masters}"
-  min_size                  = "${var.num_masters}"
+  name                      = "${var.instance_name}"
+  max_size                  = "${var.num_slaves}"
+  min_size                  = "${var.num_slaves}"
   health_check_grace_period = 300
-  desired_capacity          = "${var.num_masters}"
+  desired_capacity          = "${var.num_slaves}"
   force_delete              = true
-  launch_configuration      = "${aws_launch_configuration.nomad_masters.name}"
-  vpc_zone_identifier       = ["${var.subnet_masters_id}"]
+  launch_configuration      = "${aws_launch_configuration.nomad_slaves.name}"
+  vpc_zone_identifier       = ["${var.subnet_slaves}"]
 
   tag {
     key                 = "Name"
-    value               = "nomad-master"
+    value               = "${var.instance_name}"
     propagate_at_launch = true
   }
+
+  target_group_arns = ["${var.target_group_arns}"]
 }
 
-resource "aws_launch_configuration" "nomad_masters" {
-  count = "${var.num_masters != 0 ? 1 : 0}"
+resource "aws_launch_configuration" "nomad_slaves" {
+  count = "${var.num_slaves != 0 ? 1 : 0}"
 
-  name_prefix                 = "nomad-master"
+  name_prefix                 = "${var.instance_name}"
   image_id                    = "${data.aws_ami.coreos.id}"
   instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
@@ -48,5 +50,4 @@ resource "aws_launch_configuration" "nomad_masters" {
 
 module "config" {
   source      = "../config"
-  num_masters = "${var.num_masters}"
 }
