@@ -49,5 +49,5 @@ resource "aws_launch_configuration" "nomad_slaves" {
 }
 
 module "config" {
-  source      = "../config"
+  source = "../config"
 }

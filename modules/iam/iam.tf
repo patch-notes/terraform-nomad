@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "nomad_policy" {
       "ecr:ListImages",
       "ecr:DescribeImages",
       "ecr:BatchGetImage",
-      "ec2:Describe*"
+      "ec2:Describe*",
     ]
 
     resources = ["*"]

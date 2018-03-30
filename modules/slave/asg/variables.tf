@@ -2,10 +2,13 @@
 variable "subnet_slaves" {
   type = "list"
 }
+
 variable "num_slaves" {}
+
 variable "availability_zones" {
   type = "list"
 }
+
 variable "key_name" {}
 variable "security_groups" {}
 variable "instance_profile" {}

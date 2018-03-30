@@ -23,16 +23,16 @@ module "master_asg" {
 }
 
 module "slave_asg" {
-  source ="./modules/slave/asg"
+  source = "./modules/slave/asg"
 
-  num_slaves = "${var.num_slaves}"
-  subnet_slaves = "${aws_subnet.slaves.*.id}"
+  num_slaves         = "${var.num_slaves}"
+  subnet_slaves      = "${aws_subnet.slaves.*.id}"
   availability_zones = "${var.availability_zones}"
-  instance_type = "${var.slave_instance_type}"
-  key_name = "${var.key_name}"
-  security_groups = "${module.security_groups.main}"
-  instance_profile = "${module.iam.instance_profile}"
-  instance_name = "${var.slave_instance_name}"
+  instance_type      = "${var.slave_instance_type}"
+  key_name           = "${var.key_name}"
+  security_groups    = "${module.security_groups.main}"
+  instance_profile   = "${module.iam.instance_profile}"
+  instance_name      = "${var.slave_instance_name}"
 
   target_group_arns = "${var.slave_target_group_arns}"
 }

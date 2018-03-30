@@ -7,16 +7,18 @@ resource "aws_vpc" "nomad" {
 resource "aws_subnet" "masters" {
   vpc_id     = "${aws_vpc.nomad.id}"
   cidr_block = "${var.cidr_masters}"
+
   tags {
     Name = "nomad-masters"
   }
 }
 
 resource "aws_subnet" "slaves" {
-  count      = "${length(var.cidrs_slaves)}"
+  count             = "${length(var.cidrs_slaves)}"
   availability_zone = "${element(data.aws_availability_zones.available.names, count.index)}"
-  cidr_block = "${element(var.cidrs_slaves, count.index)}"
-  vpc_id     = "${aws_vpc.nomad.id}"
+  cidr_block        = "${element(var.cidrs_slaves, count.index)}"
+  vpc_id            = "${aws_vpc.nomad.id}"
+
   tags {
     Name = "nomad-slaves"
   }
