@@ -22,7 +22,7 @@ resource "aws_autoscaling_group" "nomad_masters" {
 
   tag {
     key                 = "Name"
-    value               = "nomad-master"
+    value               = "${var.instance_name}"
     propagate_at_launch = true
   }
 }
