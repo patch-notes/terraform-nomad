@@ -19,3 +19,5 @@ variable "instance_profile" {}
 variable "security_groups" {
   type = "list"
 }
+
+variable "instance_name" {}

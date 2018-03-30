@@ -19,6 +19,7 @@ module "master_asg" {
   instance_type      = "${var.master_instance_type}"
   instance_profile   = "${module.iam.instance_profile}"
   security_groups    = ["${module.security_groups.main}"]
+  instance_name      = "${var.master_instance_name}"
 }
 
 module "slave_asg" {

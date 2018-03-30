@@ -37,6 +37,10 @@ variable "slave_instance_name" {
   default = "nomad-slave"
 }
 
+variable "master_instance_name" {
+  default "nomad-master"
+}
+
 variable "slave_target_group_arns" {
   default = []
 }

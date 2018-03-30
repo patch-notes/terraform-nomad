@@ -62,6 +62,10 @@ _default = "m4.large_
 The instance name for slaves
 _default = "nomad-slave"_
 
+### master_instance_name
+The instance name for slaves
+_default = "nomad-master"_
+
 ### slave_target_group_arns
 The ARNs of the Target Group to which the slaves are attached, to use with an Application Load Balancer (ALB).
 _default = []_

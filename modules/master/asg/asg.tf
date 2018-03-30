@@ -11,7 +11,7 @@ resource "aws_autoscaling_group" "nomad_masters" {
   count = "${var.num_masters != 0 ? 1 : 0}"
 
   availability_zones        = ["${var.availability_zones}"]
-  name                      = "nomad-master"
+  name                      = "${var.instance_name}"
   max_size                  = "${var.num_masters}"
   min_size                  = "${var.num_masters}"
   health_check_grace_period = 300
@@ -30,7 +30,7 @@ resource "aws_autoscaling_group" "nomad_masters" {
 resource "aws_launch_configuration" "nomad_masters" {
   count = "${var.num_masters != 0 ? 1 : 0}"
 
-  name_prefix                 = "nomad-master"
+  name_prefix                 = "${var.instance_name}"
   image_id                    = "${data.aws_ami.coreos.id}"
   instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
