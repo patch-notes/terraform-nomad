@@ -21,6 +21,7 @@ data "template_file" "consul_server" {
 
   vars {
     num_masters = "${var.num_masters}"
+    instance_name = "${var.instance_name}"
   }
 }
 

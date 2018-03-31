@@ -18,3 +18,5 @@ variable "instance_type" {}
 variable "target_group_arns" {
   type = "list"
 }
+
+variable "master_instance_name" {}

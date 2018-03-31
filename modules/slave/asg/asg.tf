@@ -50,4 +50,5 @@ resource "aws_launch_configuration" "nomad_slaves" {
 
 module "config" {
   source = "../config"
+  master_instance_name = "${var.master_instance_name}"
 }

@@ -33,6 +33,7 @@ module "slave_asg" {
   security_groups    = "${module.security_groups.main}"
   instance_profile   = "${module.iam.instance_profile}"
   instance_name      = "${var.slave_instance_name}"
+  master_instance_name = "${var.master_instance_name}"
 
   target_group_arns = "${var.slave_target_group_arns}"
 }

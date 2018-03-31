@@ -5,7 +5,15 @@ data "ignition_systemd_unit" "nomad_client" {
 
 data "ignition_systemd_unit" "consul_client" {
   name    = "consul-client.service"
-  content = "${file("${path.module}/consul-client.service")}"
+  content = "${data.template_file.consul_client_service.rendered}"
+}
+
+data "template_file" "consul_client_service" {
+  template = "${file("${path.module}/consul-client.service")}"
+
+  vars {
+    master_instance_name = "${var.master_instance_name}"
+  }
 }
 
 data "ignition_systemd_unit" "token_refresher" {

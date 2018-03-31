@@ -49,4 +49,5 @@ resource "aws_launch_configuration" "nomad_masters" {
 module "config" {
   source      = "../config"
   num_masters = "${var.num_masters}"
+  instance_name = "${var.instance_name}"
 }
