@@ -48,3 +48,7 @@ variable "master_instance_name" {
 variable "slave_target_group_arns" {
   default = []
 }
+
+variable "slave_security_gruops" {
+  default = []
+}

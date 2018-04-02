@@ -30,7 +30,7 @@ module "slave_asg" {
   availability_zones = "${var.availability_zones}"
   instance_type      = "${var.slave_instance_type}"
   key_name           = "${var.key_name}"
-  security_groups    = "${module.security_groups.main}"
+  security_groups    = "${concat(list(module.security_groups.main), var.slave_security_gruops)}"
   instance_profile   = "${module.iam.instance_profile}"
   instance_name      = "${var.slave_instance_name}"
   master_instance_name = "${var.master_instance_name}"

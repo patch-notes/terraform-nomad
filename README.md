@@ -73,3 +73,7 @@ _default = "nomad-master"_
 ### slave_target_group_arns
 The ARNs of the Target Group to which the slaves are attached, to use with an Application Load Balancer (ALB).
 _default = []_
+
+## slave_security_groups
+The ids of extra security groups to add the slaves to.
+_default = []_
