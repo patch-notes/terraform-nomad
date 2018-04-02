@@ -2,6 +2,10 @@ variable "cidr_vpc" {
   default = "192.168.0.0/16"
 }
 
+variable "vpc_name" {
+  default = "nomad"
+}
+
 variable "cidr_masters" {
   default = "192.168.0.0/24"
 }

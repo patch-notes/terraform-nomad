@@ -2,6 +2,9 @@ data "aws_availability_zones" "available" {}
 
 resource "aws_vpc" "nomad" {
   cidr_block = "${var.cidr_vpc}"
+  tags {
+    Name = "${var.vpc_name}"
+  }
 }
 
 resource "aws_subnet" "masters" {
@@ -9,7 +12,7 @@ resource "aws_subnet" "masters" {
   cidr_block = "${var.cidr_masters}"
 
   tags {
-    Name = "nomad-masters"
+    Name = "${var.vpc_name}-masters"
   }
 }
 
@@ -20,7 +23,7 @@ resource "aws_subnet" "slaves" {
   vpc_id            = "${aws_vpc.nomad.id}"
 
   tags {
-    Name = "nomad-slaves"
+    Name = "${var.vpc_name}-slaves"
   }
 }
 

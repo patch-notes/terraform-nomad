@@ -28,6 +28,10 @@ module "nomad" {
 The range for the masters' and slaves' VPC.
 _default = "192.168.0.0/16"_
 
+### vpc_name
+This will be the name of the VPC, the subnets will be called `${vpc_name}-masters` and `${vpc_name-slaves}`.
+_default = "nomad"_
+
 ### cidr_masters
 The IP range for the masters' subnet.
 _default = "192.168.0.0/24"_
