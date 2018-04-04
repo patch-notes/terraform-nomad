@@ -7,8 +7,16 @@ Requires=docker.service
 TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill nomad-server
 ExecStartPre=-/usr/bin/docker rm nomad-server
-ExecStartPre=/usr/bin/docker pull djenriquez/nomad
-ExecStart=/usr/bin/docker run -v /var/run/docker.sock:/var/run/docker.sock --net host --name nomad-server djenriquez/nomad agent -server -bootstrap-expect=${num_masters}
+ExecStartPre=/usr/bin/docker pull thepeak/nomad
+ExecStart=/usr/bin/docker run \
+            -v /var/lib/nomad:/var/lib/nomad \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            --net host \
+            --name nomad-server \
+            thepeak/nomad agent \
+              -server \
+              -bootstrap-expect=${num_masters} \
+              -data-dir=/var/lib/nomad
 
 [Install]
 WantedBy=multi-user.target

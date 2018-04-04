@@ -58,6 +58,15 @@ data "ignition_file" "docker_conf" {
   }
 }
 
+data "ignition_file" "gen_nomad_conf" {
+  path = "/opt/gen_nomad_conf"
+  filesystem = "root"
+  mode = 493
+  content {
+    content = "${file("${path.module}/gen_nomad_conf")}"
+  }
+}
+
 data "ignition_config" "slave" {
   systemd = [
     "${data.ignition_systemd_unit.nomad_client.id}",
@@ -70,6 +79,7 @@ data "ignition_config" "slave" {
 
   files = [
     "${data.ignition_file.resolved_conf.id}",
-    "${data.ignition_file.docker_conf.id}"
+    "${data.ignition_file.docker_conf.id}",
+    "${data.ignition_file.gen_nomad_conf.id}"
   ]
 }
