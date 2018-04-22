@@ -51,4 +51,6 @@ resource "aws_launch_configuration" "nomad_slaves" {
 module "config" {
   source = "../config"
   master_instance_name = "${var.master_instance_name}"
+  consul_acl_enable = "${var.consul_acl_enable}"
+  consul_acl_client_token = "${var.consul_acl_client_token}"
 }

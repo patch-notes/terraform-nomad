@@ -33,6 +33,16 @@ resource "aws_security_group_rule" "consul_tcp_in" {
   security_group_id = "${aws_security_group.nomad.id}"
 }
 
+resource "aws_security_group_rule" "consul_http_tcp_in" {
+  type      = "ingress"
+  from_port = 8500
+  to_port   = 8500
+  protocol  = "tcp"
+  self      = true
+
+  security_group_id = "${aws_security_group.nomad.id}"
+}
+
 resource "aws_security_group_rule" "nomad_udp_in" {
   type      = "ingress"
   from_port = 4646

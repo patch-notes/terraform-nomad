@@ -9,7 +9,13 @@ TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill consul-server
 ExecStartPre=-/usr/bin/docker rm consul-server
 ExecStartPre=/usr/bin/docker pull consul
-ExecStart=/usr/bin/docker run --net host --name consul-server consul agent -server -bootstrap-expect=${num_masters} -advertise=$${COREOS_EC2_IPV4_LOCAL} -retry-join "provider=aws tag_key=Name tag_value=${instance_name}" -ui
+ExecStartPre=/opt/gen_consul_conf.sh
+ExecStart=/usr/bin/docker run \
+            --net host \
+            --name consul-server \
+            -v /etc/consul.json:/etc/consul.json \
+            -v /var/lib/consul:/var/lib/consul \
+            consul agent -config-file=/etc/consul.json
 
 [Install]
 WantedBy=multi-user.target

@@ -50,4 +50,6 @@ module "config" {
   source      = "../config"
   num_masters = "${var.num_masters}"
   instance_name = "${var.instance_name}"
+  consul_acl_enable = "${var.consul_acl_enable}"
+  consul_acl_master_token = "${var.consul_acl_master_token}"
 }

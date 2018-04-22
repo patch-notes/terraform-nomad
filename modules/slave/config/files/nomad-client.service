@@ -10,7 +10,7 @@ ExecStartPre=-/usr/bin/docker kill nomad-client
 ExecStartPre=-/usr/bin/docker rm nomad-client
 ExecStartPre=/usr/bin/touch /etc/docker-auth.json
 ExecStartPre=/usr/bin/docker pull thepeak/nomad:0.7.1
-ExecStartPre=/opt/gen_nomad_conf
+ExecStartPre=/opt/gen_nomad_conf.sh
 ExecStart=/usr/bin/docker run \
             -v /tmp:/tmp \
             -v /var/run/docker.sock:/var/run/docker.sock \

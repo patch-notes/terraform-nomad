@@ -22,3 +22,6 @@ variable "target_group_arns" {
 }
 
 variable "master_instance_name" {}
+
+variable "consul_acl_enable" {}
+variable "consul_acl_client_token" {}

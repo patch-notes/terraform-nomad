@@ -49,6 +49,18 @@ variable "slave_target_group_arns" {
   default = []
 }
 
-variable "slave_security_gruops" {
+variable "slave_security_groups" {
   default = []
+}
+
+variable "consul_acl_enable" {
+  default = false
+}
+
+variable "consul_acl_client_token" {
+  default = ""
+}
+
+variable "consul_acl_master_token" {
+  default = ""
 }

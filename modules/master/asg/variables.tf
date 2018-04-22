@@ -21,3 +21,6 @@ variable "security_groups" {
 }
 
 variable "instance_name" {}
+
+variable "consul_acl_enable" {}
+variable "consul_acl_master_token" {}

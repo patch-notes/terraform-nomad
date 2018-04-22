@@ -16,7 +16,6 @@ ExecStart=/usr/bin/docker run \
             thepeak/nomad agent \
               -server \
               -bootstrap-expect=${num_masters} \
-              -data-dir=/var/lib/nomad
-
+              -data-dir=/var/lib/nomad ${consul_token}
 [Install]
 WantedBy=multi-user.target

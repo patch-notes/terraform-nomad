@@ -1,30 +1,21 @@
 data "ignition_systemd_unit" "nomad_client" {
   name    = "nomad-client.service"
-  content = "${file("${path.module}/nomad-client.service")}"
+  content = "${file("${path.module}/files/nomad-client.service")}"
 }
 
 data "ignition_systemd_unit" "consul_client" {
   name    = "consul-client.service"
-  content = "${data.template_file.consul_client_service.rendered}"
-}
-
-data "template_file" "consul_client_service" {
-  template = "${file("${path.module}/consul-client.service")}"
-
-  vars {
-    master_instance_name = "${var.master_instance_name}"
-    docker_ip = "${var.docker_ip}"
-  }
+  content = "${file("${path.module}/files/consul-client.service")}"
 }
 
 data "ignition_systemd_unit" "token_refresher" {
   name    = "token-refresher.service"
-  content = "${file("${path.module}/token-refresher.service")}"
+  content = "${file("${path.module}/files/token-refresher.service")}"
 }
 
 data "ignition_systemd_unit" "token_refresher_timer" {
   name    = "token-refresher.timer"
-  content = "${file("${path.module}/token-refresher.timer")}"
+  content = "${file("${path.module}/files/token-refresher.timer")}"
 }
 
 data "ignition_systemd_unit" "update_engine" {
@@ -59,11 +50,54 @@ data "ignition_file" "docker_conf" {
 }
 
 data "ignition_file" "gen_nomad_conf" {
-  path = "/opt/gen_nomad_conf"
+  path = "/opt/gen_nomad_conf.sh"
   filesystem = "root"
   mode = 493
   content {
-    content = "${file("${path.module}/gen_nomad_conf")}"
+    content = "${file("${path.module}/files/gen_nomad_conf.sh")}"
+  }
+}
+
+data "ignition_file" "gen_consul_conf" {
+  path = "/opt/gen_consul_conf.sh"
+  filesystem = "root"
+  mode = 493
+  content {
+    content = "${data.template_file.gen_consul_conf.rendered}"
+  }
+}
+
+data "template_file" "consul_acl" {
+  template =<<-EOF
+  ,"acl_datacenter": "dc1",
+  "acl_default_policy": "deny",
+  "acl_down_policy": "extend-cache",
+  "acl_token": "$${token}"
+  EOF
+
+  vars {
+    token = "${var.consul_acl_client_token}"
+  }
+}
+
+data "template_file" "nomad_acl" {
+  template = <<-EOF
+  consul {
+    token = "$${token}"
+  }
+  EOF
+
+  vars {
+    token = "${var.consul_acl_client_token}"
+  }
+}
+
+data "template_file" "gen_consul_conf" {
+  template = "${file("${path.module}/files/gen_consul_conf.sh")}"
+  vars {
+    master_instance_name = "${var.master_instance_name}"
+    docker_ip = "${var.docker_ip}"
+    acl = "${var.consul_acl_enable ? data.template_file.consul_acl.rendered : ""}"
   }
 }
 
@@ -80,6 +114,7 @@ data "ignition_config" "slave" {
   files = [
     "${data.ignition_file.resolved_conf.id}",
     "${data.ignition_file.docker_conf.id}",
-    "${data.ignition_file.gen_nomad_conf.id}"
+    "${data.ignition_file.gen_nomad_conf.id}",
+    "${data.ignition_file.gen_consul_conf.id}"
   ]
 }

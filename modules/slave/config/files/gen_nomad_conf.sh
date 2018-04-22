@@ -22,5 +22,6 @@ cat << EOF > /etc/nomad.conf
       "docker.auth.config": "/etc/docker-auth.json"
     }
   }
+  $acl
 }
 EOF
