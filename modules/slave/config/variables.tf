@@ -16,3 +16,7 @@ variable "consul_acl_enable" {
 variable "consul_acl_client_token" {
   default = ""
 }
+
+variable "extra_fs" {
+  default = []
+}

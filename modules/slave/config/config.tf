@@ -101,6 +101,30 @@ data "template_file" "gen_consul_conf" {
   }
 }
 
+data "ignition_filesystem" "extra_fs" {
+  count = "${length(var.extra_fs)}"
+  name = "extra${count.index}"
+
+  mount {
+    device = "${element(var.extra_fs, count.index)}"
+    format = "ext4"
+  }
+}
+
+data "ignition_systemd_unit" "extra_fs" {
+  count = "${length(var.extra_fs)}"
+  name    = "data${count.index}.mount"
+  content = <<-EOF
+  [Mount]
+  What=${element(var.extra_fs, count.index)}
+  Where=/data${count.index}
+  Type=ext4
+
+  [Install]
+  WantedBy=local-fs.target
+  EOF
+}
+
 data "ignition_config" "slave" {
   systemd = [
     "${data.ignition_systemd_unit.nomad_client.id}",
@@ -109,12 +133,17 @@ data "ignition_config" "slave" {
     "${data.ignition_systemd_unit.token_refresher_timer.id}",
     "${data.ignition_systemd_unit.update_engine.id}",
     "${data.ignition_systemd_unit.locksmithd.id}",
+    "${data.ignition_systemd_unit.extra_fs.*.id}",
   ]
 
   files = [
     "${data.ignition_file.resolved_conf.id}",
     "${data.ignition_file.docker_conf.id}",
     "${data.ignition_file.gen_nomad_conf.id}",
-    "${data.ignition_file.gen_consul_conf.id}"
+    "${data.ignition_file.gen_consul_conf.id}",
+  ]
+
+  filesystems = [
+    "${data.ignition_filesystem.extra_fs.*.id}"
   ]
 }

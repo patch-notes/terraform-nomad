@@ -5,9 +5,10 @@ Requires=docker.service
 
 [Service]
 TimeoutStartSec=0
+Environment=NOMAD_VERSION=0.8.6
 ExecStartPre=-/usr/bin/docker kill nomad-server
 ExecStartPre=-/usr/bin/docker rm nomad-server
-ExecStartPre=/usr/bin/docker pull thepeak/nomad
+ExecStartPre=/usr/bin/docker pull thepeak/nomad:$${NOMAD_VERSION}
 ExecStart=/usr/bin/docker run \
             -v /var/lib/nomad:/var/lib/nomad \
             -v /var/run/docker.sock:/var/run/docker.sock \
@@ -16,6 +17,6 @@ ExecStart=/usr/bin/docker run \
             thepeak/nomad agent \
               -server \
               -bootstrap-expect=${num_masters} \
-              -data-dir=/var/lib/nomad ${consul_token}
+              -data-dir=/var/lib/nomad:$${NOMAD_VERSION} ${consul_token}
 [Install]
 WantedBy=multi-user.target

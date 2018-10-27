@@ -33,13 +33,14 @@ resource "aws_internet_gateway" "nomad" {
 
 resource "aws_route_table" "nomad" {
   vpc_id = "${aws_vpc.nomad.id}"
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.nomad.id}"
-  }
 }
 
+resource "aws_route" "nomad-default" {
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = "${aws_internet_gateway.nomad.id}"
+  route_table_id = "${aws_route_table.nomad.id}"
+}
+  
 resource "aws_route_table_association" "masters" {
   subnet_id      = "${aws_subnet.masters.id}"
   route_table_id = "${aws_route_table.nomad.id}"

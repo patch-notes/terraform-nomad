@@ -43,6 +43,7 @@ resource "aws_launch_configuration" "nomad_masters" {
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes = ["image_id"]
   }
 }
 

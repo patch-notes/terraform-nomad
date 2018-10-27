@@ -3,6 +3,7 @@ resource "aws_security_group" "nomad" {
   name   = "nomad_master"
 }
 
+/*
 resource "aws_security_group_rule" "ssh_in" {
   type        = "ingress"
   from_port   = 22
@@ -11,7 +12,7 @@ resource "aws_security_group_rule" "ssh_in" {
   cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = "${aws_security_group.nomad.id}"
-}
+}*/
 
 resource "aws_security_group_rule" "nomad_tcp_in" {
   type      = "ingress"
