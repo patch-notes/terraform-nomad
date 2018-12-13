@@ -1,6 +1,7 @@
 variable "master_instance_name" {
   default = "nomad-master"
 }
+
 variable "docker_ip" {
   default = "172.17.0.1"
 }
@@ -19,4 +20,8 @@ variable "consul_acl_client_token" {
 
 variable "extra_fs" {
   default = []
+}
+
+variable "swap_size" {
+  default = "0"
 }

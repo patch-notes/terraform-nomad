@@ -21,24 +21,24 @@ module "master_asg" {
   security_groups    = ["${module.security_groups.main}"]
   instance_name      = "${var.master_instance_name}"
 
-  consul_acl_enable = "${var.consul_acl_enable}"
+  consul_acl_enable       = "${var.consul_acl_enable}"
   consul_acl_master_token = "${var.consul_acl_master_token}"
 }
 
 module "slave_asg" {
   source = "./modules/slave/asg"
 
-  num_slaves         = "${var.num_slaves}"
-  subnet_slaves      = "${aws_subnet.slaves.*.id}"
-  availability_zones = "${var.availability_zones}"
-  instance_type      = "${var.slave_instance_type}"
-  key_name           = "${var.key_name}"
-  security_groups    = "${concat(list(module.security_groups.main), var.slave_security_groups)}"
-  instance_profile   = "${module.iam.instance_profile}"
-  instance_name      = "${var.slave_instance_name}"
+  num_slaves           = "${var.num_slaves}"
+  subnet_slaves        = "${aws_subnet.slaves.*.id}"
+  availability_zones   = "${var.availability_zones}"
+  instance_type        = "${var.slave_instance_type}"
+  key_name             = "${var.key_name}"
+  security_groups      = "${concat(list(module.security_groups.main), var.slave_security_groups)}"
+  instance_profile     = "${module.iam.instance_profile}"
+  instance_name        = "${var.slave_instance_name}"
   master_instance_name = "${var.master_instance_name}"
 
-  consul_acl_enable = "${var.consul_acl_enable}"
+  consul_acl_enable       = "${var.consul_acl_enable}"
   consul_acl_client_token = "${var.consul_acl_client_token}"
 
   target_group_arns = "${var.slave_target_group_arns}"

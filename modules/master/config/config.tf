@@ -12,24 +12,26 @@ data "template_file" "nomad_server" {
   template = "${file("${path.module}/files/nomad-server.service")}"
 
   vars {
-    num_masters = "${var.num_masters}"
+    num_masters  = "${var.num_masters}"
     consul_token = "${var.consul_acl_enable ? data.template_file.nomad_acl.rendered : ""}"
   }
 }
 
 data "template_file" "nomad_acl" {
   template = "-consul-token=$${acl_master_token}"
+
   vars {
     acl_master_token = "${var.consul_acl_master_token}"
   }
 }
+
 data "template_file" "gen_consul_conf" {
   template = "${file("${path.module}/files/gen_consul_conf.sh")}"
 
   vars {
-    num_masters = "${var.num_masters}"
+    num_masters   = "${var.num_masters}"
     instance_name = "${var.instance_name}"
-    acl = "${var.consul_acl_enable ? data.template_file.consul_acl.rendered : ""}"
+    acl           = "${var.consul_acl_enable ? data.template_file.consul_acl.rendered : ""}"
   }
 }
 
@@ -47,9 +49,10 @@ data "template_file" "consul_acl" {
 }
 
 data "ignition_file" "gen_consul_conf" {
-  path = "/opt/gen_consul_conf.sh"
+  path       = "/opt/gen_consul_conf.sh"
   filesystem = "root"
-  mode = 493
+  mode       = 493
+
   content {
     content = "${data.template_file.gen_consul_conf.rendered}"
   }

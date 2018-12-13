@@ -10,9 +10,11 @@ variable "availability_zones" {
 }
 
 variable "key_name" {}
+
 variable "security_groups" {
   type = "list"
 }
+
 variable "instance_profile" {}
 variable "instance_name" {}
 variable "instance_type" {}

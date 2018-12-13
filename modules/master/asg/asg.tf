@@ -43,14 +43,14 @@ resource "aws_launch_configuration" "nomad_masters" {
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes = ["image_id"]
+    ignore_changes        = ["image_id"]
   }
 }
 
 module "config" {
-  source      = "../config"
-  num_masters = "${var.num_masters}"
-  instance_name = "${var.instance_name}"
-  consul_acl_enable = "${var.consul_acl_enable}"
+  source                  = "../config"
+  num_masters             = "${var.num_masters}"
+  instance_name           = "${var.instance_name}"
+  consul_acl_enable       = "${var.consul_acl_enable}"
   consul_acl_master_token = "${var.consul_acl_master_token}"
 }
