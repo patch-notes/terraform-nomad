@@ -1,9 +1,9 @@
 [Unit]
-Description=Run the SLA-Web Journey 1 every 5 minutes
+Description=Refresh the Token ever 8 hours
 
 [Timer]
 OnBootSec=0
-OnUnitActiveSec=12h
+OnUnitActiveSec=8h
 
 [Install]
 WantedBy=timers.target
